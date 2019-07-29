@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,10 +21,12 @@ import com.raveesoft.moviecatalogservice.models.Rating;
 @RequestMapping("/catalog")
 public class MovieCatalogResource {
 
+	@Autowired
+	private RestTemplate restTemplate;
+	
 	@RequestMapping("/{catalogId}")
 	public List<CatalogItem> getCatalog(@PathVariable String catalogId){
 		
-		RestTemplate restTemplate = new RestTemplate();
 		Movie movie = restTemplate.getForObject("http://localhost:8082/movies/1", Movie.class);
 		
 		List<Rating> ratings = Arrays.asList(
