@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import com.raveesoft.moviecatalogservice.models.CatalogItem;
 import com.raveesoft.moviecatalogservice.models.Movie;
 import com.raveesoft.moviecatalogservice.models.Rating;
+import com.raveesoft.moviecatalogservice.models.UserRating;
 
 @RestController
 @RequestMapping("/catalog")
@@ -24,18 +25,19 @@ public class MovieCatalogResource {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	@RequestMapping("/{catalogId}")
-	public List<CatalogItem> getCatalog(@PathVariable String catalogId){
+	@RequestMapping("/{userId}")
+	public List<CatalogItem> getCatalog(@PathVariable String userId){
 		
+		UserRating ratings = restTemplate.getForObject("http://localhost:8084/ratingsdata/users/"+userId, UserRating.class);
 		Movie movie = restTemplate.getForObject("http://localhost:8082/movies/1", Movie.class);
 		
-		List<Rating> ratings = Arrays.asList(
+		/*List<Rating> ratings = Arrays.asList(
 				new Rating("123", 4),
 				new Rating("234", 5)
 				
-		);
+		);*/
 		
-		return ratings.stream().map(rating -> {
+		return ratings.getRating().stream().map(rating -> {
 			restTemplate.getForObject("http://localhost:8082/movies/"+rating.getMovieId(), Movie.class);
 			return new CatalogItem(movie.getName()	, movie.getDesc(),rating.getRating());
 			
