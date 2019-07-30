@@ -2,32 +2,38 @@ package com.raveesoft.movieinfoservice.models;
 
 public class Movie {
 	
-	private String name;
-	private String desc;
-	
-	public Movie(String name, String desc) {
-		super();
-		this.name = name;
-		this.desc = desc;
-	}
+	private String movieId;
+    private String name;
+    private String description;
 
-	public String getName() {
-		return name;
-	}
+    public Movie(String movieId, String name, String description) {
+        this.movieId = movieId;
+        this.name = name;
+        this.description = description;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getMovieId() {
+        return movieId;
+    }
 
-	public String getDesc() {
-		return desc;
-	}
+    public void setMovieId(String movieId) {
+        this.movieId = movieId;
+    }
 
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
-	
-	
-	
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 	
 }
