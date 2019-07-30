@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.raveesoft.moviecatalogservice.models.CatalogItem;
 import com.raveesoft.moviecatalogservice.models.Movie;
 import com.raveesoft.moviecatalogservice.models.Rating;
@@ -26,10 +27,11 @@ public class MovieCatalogResource {
 	private RestTemplate restTemplate;
 	
 	@RequestMapping("/{userId}")
+	@HystrixCommand(fallbackMethod="fallBackMethod")
 	public List<CatalogItem> getCatalog(@PathVariable String userId){
 		
-		UserRating ratings = restTemplate.getForObject("http://movie-rating-service/ratingsdata/users/"+userId, UserRating.class);
-		Movie movie = restTemplate.getForObject("http://movie-info-service/movies/1", Movie.class);
+		//UserRating ratings = restTemplate.getForObject("http://movie-rating-service/ratingsdata/users/"+userId, UserRating.class);
+		//Movie movie = restTemplate.getForObject("http://movie-info-service/movies/1", Movie.class);
 		
 		/*List<Rating> ratings = Arrays.asList(
 				new Rating("123", 4),
@@ -37,16 +39,21 @@ public class MovieCatalogResource {
 				
 		);*/
 		
-		return ratings.getRating().stream().map(rating -> {
+		/*return ratings.getRating().stream().map(rating -> {
 			restTemplate.getForObject("http://movie-info-service/movies/"+rating.getMovieId(), Movie.class);
 			return new CatalogItem(movie.getName()	, movie.getDesc(),rating.getRating());
 			
 		
-		}).collect(Collectors.toList());
+		}).collect(Collectors.toList());*/
 		
-		/*return Collections.singletonList(
-				new CatalogItem("Avatar", "Avatar 2009", 5)
-				);*/
+		return Arrays.asList(new CatalogItem("Heloooooo"	, "",0));
 		
 	}
+	
+	public List<CatalogItem> fallBackMethod(@PathVariable String userId){
+		return Arrays.asList(new CatalogItem("No Movie"	, "",0));
+		
+	}
+
+
 }
